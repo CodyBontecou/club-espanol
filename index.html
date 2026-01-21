@@ -1,0 +1,1386 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Club Español - Learn Spanish with Gabriel</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --terracotta: #C4643D;
+      --terracotta-light: #E8956A;
+      --cream: #FDF6E9;
+      --cream-dark: #F5EAD6;
+      --burgundy: #722F37;
+      --burgundy-deep: #4A1F24;
+      --gold: #D4A853;
+      --gold-light: #E8C97A;
+      --charcoal: #2C2824;
+      --warm-gray: #6B5E54;
+      --white: #FFFDFB;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--cream);
+      color: var(--charcoal);
+      overflow-x: hidden;
+      line-height: 1.6;
+    }
+
+    /* Noise texture overlay */
+    body::before {
+      content: '';
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      opacity: 0.03;
+      z-index: 1000;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+    }
+
+    h1, h2, h3, h4 {
+      font-family: 'Playfair Display', serif;
+      font-weight: 500;
+    }
+
+    /* Navigation */
+    nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 100;
+      padding: 1.5rem 4rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    nav.scrolled {
+      background: rgba(253, 246, 233, 0.95);
+      backdrop-filter: blur(10px);
+      box-shadow: 0 2px 40px rgba(114, 47, 55, 0.08);
+      padding: 1rem 4rem;
+    }
+
+    .logo {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.6rem;
+      font-weight: 600;
+      color: var(--burgundy);
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .logo-accent {
+      color: var(--terracotta);
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 2.5rem;
+      list-style: none;
+    }
+
+    .nav-links a {
+      text-decoration: none;
+      color: var(--charcoal);
+      font-size: 0.95rem;
+      font-weight: 500;
+      position: relative;
+      transition: color 0.3s;
+    }
+
+    .nav-links a::after {
+      content: '';
+      position: absolute;
+      bottom: -4px;
+      left: 0;
+      width: 0;
+      height: 2px;
+      background: var(--terracotta);
+      transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .nav-links a:hover {
+      color: var(--terracotta);
+    }
+
+    .nav-links a:hover::after {
+      width: 100%;
+    }
+
+    .nav-cta {
+      background: var(--burgundy);
+      color: var(--white) !important;
+      padding: 0.75rem 1.75rem;
+      border-radius: 50px;
+      transition: all 0.3s !important;
+    }
+
+    .nav-cta::after {
+      display: none !important;
+    }
+
+    .nav-cta:hover {
+      background: var(--terracotta) !important;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(196, 100, 61, 0.3);
+    }
+
+    /* Hero Section */
+    .hero {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      position: relative;
+      padding: 8rem 4rem 4rem;
+      overflow: hidden;
+    }
+
+    .hero-bg {
+      position: absolute;
+      top: 0;
+      right: 0;
+      width: 55%;
+      height: 100%;
+      background: linear-gradient(135deg, var(--terracotta) 0%, var(--burgundy) 100%);
+      clip-path: polygon(20% 0, 100% 0, 100% 100%, 0% 100%);
+      z-index: -1;
+    }
+
+    .hero-bg::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.05'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+    }
+
+    .hero-content {
+      max-width: 600px;
+      animation: slideUp 1s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+      opacity: 0;
+    }
+
+    @keyframes slideUp {
+      from {
+        opacity: 0;
+        transform: translateY(40px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: var(--cream-dark);
+      padding: 0.5rem 1rem;
+      border-radius: 50px;
+      font-size: 0.85rem;
+      font-weight: 500;
+      color: var(--terracotta);
+      margin-bottom: 1.5rem;
+      animation: slideUp 1s cubic-bezier(0.4, 0, 0.2, 1) 0.1s forwards;
+      opacity: 0;
+    }
+
+    .hero-badge svg {
+      width: 16px;
+      height: 16px;
+    }
+
+    .hero h1 {
+      font-size: clamp(3rem, 6vw, 4.5rem);
+      line-height: 1.1;
+      color: var(--burgundy-deep);
+      margin-bottom: 1.5rem;
+      animation: slideUp 1s cubic-bezier(0.4, 0, 0.2, 1) 0.2s forwards;
+      opacity: 0;
+    }
+
+    .hero h1 .highlight {
+      color: var(--terracotta);
+      position: relative;
+      display: inline-block;
+    }
+
+    .hero h1 .highlight::after {
+      content: '';
+      position: absolute;
+      bottom: 5px;
+      left: 0;
+      width: 100%;
+      height: 8px;
+      background: var(--gold-light);
+      z-index: -1;
+      opacity: 0.5;
+    }
+
+    .hero p {
+      font-size: 1.15rem;
+      color: var(--warm-gray);
+      margin-bottom: 2.5rem;
+      max-width: 480px;
+      animation: slideUp 1s cubic-bezier(0.4, 0, 0.2, 1) 0.3s forwards;
+      opacity: 0;
+    }
+
+    .hero-buttons {
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+      animation: slideUp 1s cubic-bezier(0.4, 0, 0.2, 1) 0.4s forwards;
+      opacity: 0;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 1rem 2rem;
+      border-radius: 50px;
+      font-size: 1rem;
+      font-weight: 500;
+      text-decoration: none;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      cursor: pointer;
+      border: none;
+    }
+
+    .btn-primary {
+      background: var(--terracotta);
+      color: var(--white);
+    }
+
+    .btn-primary:hover {
+      background: var(--burgundy);
+      transform: translateY(-3px);
+      box-shadow: 0 15px 40px rgba(114, 47, 55, 0.25);
+    }
+
+    .btn-secondary {
+      background: transparent;
+      color: var(--charcoal);
+      border: 2px solid var(--charcoal);
+    }
+
+    .btn-secondary:hover {
+      background: var(--charcoal);
+      color: var(--white);
+      transform: translateY(-3px);
+    }
+
+    .hero-image {
+      position: absolute;
+      right: 8%;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 420px;
+      height: 520px;
+      border-radius: 200px 200px 20px 20px;
+      overflow: hidden;
+      box-shadow: 0 40px 80px rgba(74, 31, 36, 0.3);
+      animation: floatIn 1.2s cubic-bezier(0.4, 0, 0.2, 1) 0.5s forwards;
+      opacity: 0;
+    }
+
+    @keyframes floatIn {
+      from {
+        opacity: 0;
+        transform: translateY(-45%) scale(0.95);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(-50%) scale(1);
+      }
+    }
+
+    .hero-image img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .hero-image::before {
+      content: '';
+      position: absolute;
+      top: -20px;
+      left: -20px;
+      right: -20px;
+      bottom: -20px;
+      border: 3px solid var(--gold);
+      border-radius: 220px 220px 40px 40px;
+      z-index: -1;
+    }
+
+    .floating-card {
+      position: absolute;
+      background: var(--white);
+      padding: 1rem 1.25rem;
+      border-radius: 16px;
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.1);
+      animation: float 4s ease-in-out infinite;
+    }
+
+    .floating-card.card-1 {
+      bottom: 15%;
+      left: -60px;
+      animation-delay: 0s;
+    }
+
+    .floating-card.card-2 {
+      top: 20%;
+      right: -40px;
+      animation-delay: 1s;
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-10px); }
+    }
+
+    .floating-card .emoji {
+      font-size: 1.5rem;
+      margin-bottom: 0.25rem;
+    }
+
+    .floating-card .label {
+      font-size: 0.75rem;
+      color: var(--warm-gray);
+    }
+
+    .floating-card .value {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: var(--burgundy);
+    }
+
+    /* Stats Section */
+    .stats {
+      display: flex;
+      justify-content: center;
+      gap: 4rem;
+      padding: 4rem 4rem;
+      background: var(--burgundy-deep);
+      position: relative;
+    }
+
+    .stats::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M11 18c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm48 25c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm-43-7c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm63 31c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM34 90c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm56-76c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM12 86c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm28-65c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm23-11c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-6 60c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm29 22c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zM32 63c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm57-13c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-9-21c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM60 91c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM35 41c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM12 60c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2z' fill='%23ffffff' fill-opacity='0.03' fill-rule='evenodd'/%3E%3C/svg%3E");
+    }
+
+    .stat-item {
+      text-align: center;
+      color: var(--white);
+    }
+
+    .stat-number {
+      font-family: 'Playfair Display', serif;
+      font-size: 3.5rem;
+      font-weight: 600;
+      color: var(--gold);
+      line-height: 1;
+    }
+
+    .stat-label {
+      font-size: 0.95rem;
+      opacity: 0.85;
+      margin-top: 0.5rem;
+    }
+
+    /* About Section */
+    .about {
+      padding: 8rem 4rem;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 6rem;
+      align-items: center;
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+
+    .about-image {
+      position: relative;
+    }
+
+    .about-image img {
+      width: 100%;
+      border-radius: 20px;
+      box-shadow: 0 30px 60px rgba(0, 0, 0, 0.1);
+    }
+
+    .about-image::before {
+      content: '';
+      position: absolute;
+      top: -30px;
+      left: -30px;
+      width: 200px;
+      height: 200px;
+      border: 4px solid var(--terracotta);
+      border-radius: 20px;
+      z-index: -1;
+      opacity: 0.3;
+    }
+
+    .about-image::after {
+      content: '';
+      position: absolute;
+      bottom: -20px;
+      right: -20px;
+      width: 150px;
+      height: 150px;
+      background: var(--gold-light);
+      border-radius: 50%;
+      z-index: -1;
+      opacity: 0.4;
+    }
+
+    .about-content {
+      padding-left: 2rem;
+    }
+
+    .section-label {
+      display: inline-block;
+      font-size: 0.85rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      color: var(--terracotta);
+      margin-bottom: 1rem;
+    }
+
+    .section-title {
+      font-size: clamp(2rem, 4vw, 3rem);
+      color: var(--burgundy-deep);
+      margin-bottom: 1.5rem;
+      line-height: 1.2;
+    }
+
+    .about-text {
+      color: var(--warm-gray);
+      font-size: 1.05rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .about-features {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.5rem;
+      margin-top: 2rem;
+    }
+
+    .about-feature {
+      display: flex;
+      align-items: flex-start;
+      gap: 1rem;
+    }
+
+    .about-feature-icon {
+      width: 50px;
+      height: 50px;
+      background: linear-gradient(135deg, var(--terracotta-light), var(--terracotta));
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .about-feature-icon svg {
+      width: 24px;
+      height: 24px;
+      color: var(--white);
+    }
+
+    .about-feature h4 {
+      font-size: 1rem;
+      color: var(--charcoal);
+      margin-bottom: 0.25rem;
+    }
+
+    .about-feature p {
+      font-size: 0.9rem;
+      color: var(--warm-gray);
+    }
+
+    /* Courses Section */
+    .courses {
+      background: linear-gradient(180deg, var(--cream-dark) 0%, var(--cream) 100%);
+      padding: 8rem 4rem;
+    }
+
+    .courses-header {
+      text-align: center;
+      max-width: 600px;
+      margin: 0 auto 4rem;
+    }
+
+    .courses-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 2rem;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .course-card {
+      background: var(--white);
+      border-radius: 24px;
+      padding: 2.5rem;
+      position: relative;
+      overflow: hidden;
+      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.05);
+    }
+
+    .course-card:hover {
+      transform: translateY(-10px);
+      box-shadow: 0 30px 60px rgba(114, 47, 55, 0.15);
+    }
+
+    .course-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 5px;
+      background: linear-gradient(90deg, var(--terracotta), var(--gold));
+    }
+
+    .course-icon {
+      width: 70px;
+      height: 70px;
+      background: linear-gradient(135deg, var(--cream) 0%, var(--cream-dark) 100%);
+      border-radius: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .course-level {
+      display: inline-block;
+      background: var(--cream-dark);
+      color: var(--terracotta);
+      padding: 0.35rem 1rem;
+      border-radius: 50px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      margin-bottom: 1rem;
+    }
+
+    .course-card h3 {
+      font-size: 1.5rem;
+      color: var(--burgundy-deep);
+      margin-bottom: 1rem;
+    }
+
+    .course-card p {
+      color: var(--warm-gray);
+      font-size: 0.95rem;
+      margin-bottom: 1.5rem;
+      line-height: 1.7;
+    }
+
+    .course-details {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-top: 1.5rem;
+      border-top: 1px solid var(--cream-dark);
+    }
+
+    .course-duration {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.9rem;
+      color: var(--warm-gray);
+    }
+
+    .course-duration svg {
+      width: 18px;
+      height: 18px;
+      color: var(--terracotta);
+    }
+
+    .course-price {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.5rem;
+      font-weight: 600;
+      color: var(--terracotta);
+    }
+
+    .course-price span {
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.85rem;
+      font-weight: 400;
+      color: var(--warm-gray);
+    }
+
+    /* Testimonials */
+    .testimonials {
+      padding: 8rem 4rem;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .testimonials-header {
+      text-align: center;
+      margin-bottom: 4rem;
+    }
+
+    .testimonials-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 2rem;
+    }
+
+    .testimonial-card {
+      background: var(--white);
+      border-radius: 24px;
+      padding: 2.5rem;
+      position: relative;
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.05);
+      transition: all 0.3s;
+    }
+
+    .testimonial-card:hover {
+      box-shadow: 0 20px 50px rgba(114, 47, 55, 0.1);
+    }
+
+    .testimonial-card::before {
+      content: '"';
+      position: absolute;
+      top: 20px;
+      right: 30px;
+      font-family: 'Playfair Display', serif;
+      font-size: 6rem;
+      color: var(--terracotta);
+      opacity: 0.1;
+      line-height: 1;
+    }
+
+    .testimonial-text {
+      font-size: 1.1rem;
+      color: var(--charcoal);
+      line-height: 1.8;
+      margin-bottom: 2rem;
+      font-style: italic;
+    }
+
+    .testimonial-author {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .testimonial-avatar {
+      width: 55px;
+      height: 55px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 3px solid var(--cream-dark);
+    }
+
+    .testimonial-info h4 {
+      font-size: 1rem;
+      color: var(--burgundy);
+      margin-bottom: 0.25rem;
+    }
+
+    .testimonial-info p {
+      font-size: 0.85rem;
+      color: var(--warm-gray);
+    }
+
+    .testimonial-rating {
+      display: flex;
+      gap: 0.25rem;
+      margin-top: 0.5rem;
+    }
+
+    .testimonial-rating svg {
+      width: 16px;
+      height: 16px;
+      color: var(--gold);
+      fill: var(--gold);
+    }
+
+    /* CTA Section */
+    .cta {
+      background: linear-gradient(135deg, var(--burgundy) 0%, var(--burgundy-deep) 100%);
+      padding: 6rem 4rem;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .cta::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: url("data:image/svg+xml,%3Csvg width='80' height='80' viewBox='0 0 80 80' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.03'%3E%3Cpath d='M50 50c0-5.523 4.477-10 10-10s10 4.477 10 10-4.477 10-10 10c0 5.523-4.477 10-10 10s-10-4.477-10-10 4.477-10 10-10zM10 10c0-5.523 4.477-10 10-10s10 4.477 10 10-4.477 10-10 10c0 5.523-4.477 10-10 10S0 25.523 0 20s4.477-10 10-10zm10 8c4.418 0 8-3.582 8-8s-3.582-8-8-8-8 3.582-8 8 3.582 8 8 8zm40 40c4.418 0 8-3.582 8-8s-3.582-8-8-8-8 3.582-8 8 3.582 8 8 8z' /%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+    }
+
+    .cta-content {
+      position: relative;
+      z-index: 1;
+      max-width: 700px;
+      margin: 0 auto;
+    }
+
+    .cta h2 {
+      font-size: clamp(2rem, 4vw, 3rem);
+      color: var(--white);
+      margin-bottom: 1rem;
+    }
+
+    .cta p {
+      color: rgba(255, 255, 255, 0.8);
+      font-size: 1.15rem;
+      margin-bottom: 2.5rem;
+    }
+
+    .cta .btn-primary {
+      background: var(--gold);
+      color: var(--burgundy-deep);
+    }
+
+    .cta .btn-primary:hover {
+      background: var(--white);
+      box-shadow: 0 15px 40px rgba(0, 0, 0, 0.2);
+    }
+
+    /* Footer */
+    footer {
+      background: var(--charcoal);
+      color: var(--white);
+      padding: 4rem 4rem 2rem;
+    }
+
+    .footer-content {
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr 1fr;
+      gap: 4rem;
+      max-width: 1200px;
+      margin: 0 auto 3rem;
+    }
+
+    .footer-brand {
+      max-width: 300px;
+    }
+
+    .footer-logo {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.8rem;
+      font-weight: 600;
+      margin-bottom: 1rem;
+      display: block;
+    }
+
+    .footer-brand p {
+      color: rgba(255, 255, 255, 0.7);
+      font-size: 0.95rem;
+      line-height: 1.7;
+    }
+
+    .footer-social {
+      display: flex;
+      gap: 1rem;
+      margin-top: 1.5rem;
+    }
+
+    .footer-social a {
+      width: 40px;
+      height: 40px;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.3s;
+    }
+
+    .footer-social a:hover {
+      background: var(--terracotta);
+      transform: translateY(-3px);
+    }
+
+    .footer-social svg {
+      width: 18px;
+      height: 18px;
+      color: var(--white);
+    }
+
+    .footer-column h4 {
+      font-size: 1rem;
+      margin-bottom: 1.5rem;
+      color: var(--white);
+    }
+
+    .footer-column ul {
+      list-style: none;
+    }
+
+    .footer-column li {
+      margin-bottom: 0.75rem;
+    }
+
+    .footer-column a {
+      color: rgba(255, 255, 255, 0.7);
+      text-decoration: none;
+      font-size: 0.95rem;
+      transition: color 0.3s;
+    }
+
+    .footer-column a:hover {
+      color: var(--terracotta-light);
+    }
+
+    .footer-bottom {
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+      padding-top: 2rem;
+      text-align: center;
+      color: rgba(255, 255, 255, 0.5);
+      font-size: 0.9rem;
+    }
+
+    /* Responsive */
+    @media (max-width: 1024px) {
+      .hero-image {
+        width: 350px;
+        height: 430px;
+        right: 5%;
+      }
+
+      .courses-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .about {
+        gap: 4rem;
+      }
+    }
+
+    @media (max-width: 768px) {
+      nav {
+        padding: 1rem 2rem;
+      }
+
+      .nav-links {
+        display: none;
+      }
+
+      .hero {
+        padding: 6rem 2rem 4rem;
+        flex-direction: column;
+      }
+
+      .hero-bg {
+        width: 100%;
+        height: 50%;
+        bottom: 0;
+        top: auto;
+        clip-path: polygon(0 30%, 100% 0, 100% 100%, 0% 100%);
+      }
+
+      .hero-image {
+        position: relative;
+        right: auto;
+        top: auto;
+        transform: none;
+        width: 100%;
+        max-width: 350px;
+        height: 400px;
+        margin-top: 3rem;
+      }
+
+      .about {
+        grid-template-columns: 1fr;
+        padding: 4rem 2rem;
+      }
+
+      .about-content {
+        padding-left: 0;
+      }
+
+      .about-features {
+        grid-template-columns: 1fr;
+      }
+
+      .courses {
+        padding: 4rem 2rem;
+      }
+
+      .courses-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .stats {
+        flex-wrap: wrap;
+        gap: 2rem;
+        padding: 3rem 2rem;
+      }
+
+      .stat-item {
+        flex: 1 1 40%;
+      }
+
+      .testimonials {
+        padding: 4rem 2rem;
+      }
+
+      .testimonials-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .cta {
+        padding: 4rem 2rem;
+      }
+
+      .footer-content {
+        grid-template-columns: 1fr 1fr;
+        gap: 2rem;
+      }
+
+      footer {
+        padding: 3rem 2rem 2rem;
+      }
+    }
+
+    /* Scroll animations */
+    .reveal {
+      opacity: 0;
+      transform: translateY(30px);
+      transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .reveal.active {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  </style>
+</head>
+<body>
+  <!-- Navigation -->
+  <nav id="navbar">
+    <a href="#" class="logo">Club <span class="logo-accent">Español</span></a>
+    <ul class="nav-links">
+      <li><a href="#about">About</a></li>
+      <li><a href="#courses">Courses</a></li>
+      <li><a href="#testimonials">Reviews</a></li>
+      <li><a href="#contact" class="nav-cta">Get Started</a></li>
+    </ul>
+  </nav>
+
+  <!-- Hero Section -->
+  <section class="hero">
+    <div class="hero-bg"></div>
+    <div class="hero-content">
+      <div class="hero-badge">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+          <path d="M11.645 20.91l-.007-.003-.022-.012a15.247 15.247 0 01-.383-.218 25.18 25.18 0 01-4.244-3.17C4.688 15.36 2.25 12.174 2.25 8.25 2.25 5.322 4.714 3 7.688 3A5.5 5.5 0 0112 5.052 5.5 5.5 0 0116.313 3c2.973 0 5.437 2.322 5.437 5.25 0 3.925-2.438 7.111-4.739 9.256a25.175 25.175 0 01-4.244 3.17 15.247 15.247 0 01-.383.219l-.022.012-.007.004-.003.001a.752.752 0 01-.704 0l-.003-.001z" />
+        </svg>
+        Beginner-Friendly Classes
+      </div>
+      <h1>Learn Spanish with <span class="highlight">Gabriel</span></h1>
+      <p>Start your journey to fluency with personalized lessons designed for beginners. Discover the beauty of Spanish language and culture in a warm, supportive environment.</p>
+      <div class="hero-buttons">
+        <a href="#courses" class="btn btn-primary">
+          Explore Courses
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M5 12h14M12 5l7 7-7 7"/>
+          </svg>
+        </a>
+        <a href="#about" class="btn btn-secondary">Meet Gabriel</a>
+      </div>
+    </div>
+    <div class="hero-image">
+      <img src="https://images.unsplash.com/photo-1544717305-2782549b5136?w=600&h=800&fit=crop&crop=face" alt="Spanish teacher Gabriel">
+      <div class="floating-card card-1">
+        <div class="emoji">🎓</div>
+        <div class="label">Students</div>
+        <div class="value">500+</div>
+      </div>
+      <div class="floating-card card-2">
+        <div class="emoji">⭐</div>
+        <div class="label">Rating</div>
+        <div class="value">4.9/5</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Stats -->
+  <section class="stats">
+    <div class="stat-item reveal">
+      <div class="stat-number">500+</div>
+      <div class="stat-label">Happy Students</div>
+    </div>
+    <div class="stat-item reveal">
+      <div class="stat-number">8+</div>
+      <div class="stat-label">Years Teaching</div>
+    </div>
+    <div class="stat-item reveal">
+      <div class="stat-number">15</div>
+      <div class="stat-label">Course Modules</div>
+    </div>
+    <div class="stat-item reveal">
+      <div class="stat-number">98%</div>
+      <div class="stat-label">Success Rate</div>
+    </div>
+  </section>
+
+  <!-- About Section -->
+  <section class="about" id="about">
+    <div class="about-image reveal">
+      <img src="https://images.unsplash.com/photo-1522202176988-66273c2fd55f?w=600&h=700&fit=crop" alt="Spanish class environment">
+    </div>
+    <div class="about-content reveal">
+      <span class="section-label">About Your Teacher</span>
+      <h2 class="section-title">Meet Gabriel, Your Guide to Spanish Fluency</h2>
+      <p class="about-text">
+        ¡Hola! I'm Gabriel, a native Spanish speaker with over 8 years of experience teaching students from all walks of life. My passion is making Spanish accessible and enjoyable for beginners.
+      </p>
+      <p class="about-text">
+        My teaching philosophy centers on conversation, culture, and connection. I believe everyone can learn Spanish when given the right environment and encouragement.
+      </p>
+      <div class="about-features">
+        <div class="about-feature">
+          <div class="about-feature-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+            </svg>
+          </div>
+          <div>
+            <h4>Native Speaker</h4>
+            <p>Learn authentic pronunciation</p>
+          </div>
+        </div>
+        <div class="about-feature">
+          <div class="about-feature-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
+            </svg>
+          </div>
+          <div>
+            <h4>Small Classes</h4>
+            <p>Personal attention for all</p>
+          </div>
+        </div>
+        <div class="about-feature">
+          <div class="about-feature-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
+            </svg>
+          </div>
+          <div>
+            <h4>Fun Methods</h4>
+            <p>Games, songs & culture</p>
+          </div>
+        </div>
+        <div class="about-feature">
+          <div class="about-feature-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+          </div>
+          <div>
+            <h4>Flexible Schedule</h4>
+            <p>Classes that fit your life</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Courses Section -->
+  <section class="courses" id="courses">
+    <div class="courses-header reveal">
+      <span class="section-label">Our Programs</span>
+      <h2 class="section-title">Courses for Every Beginner</h2>
+      <p>Choose the learning path that matches your goals. All courses include live sessions, practice materials, and ongoing support.</p>
+    </div>
+    <div class="courses-grid">
+      <div class="course-card reveal">
+        <div class="course-icon">🌱</div>
+        <span class="course-level">Absolute Beginner</span>
+        <h3>Spanish Foundations</h3>
+        <p>Start from zero! Learn essential vocabulary, basic grammar, and everyday phrases. Perfect for those with no prior experience.</p>
+        <div class="course-details">
+          <div class="course-duration">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+            8 weeks
+          </div>
+          <div class="course-price">$199 <span>/course</span></div>
+        </div>
+      </div>
+      <div class="course-card reveal">
+        <div class="course-icon">💬</div>
+        <span class="course-level">Beginner</span>
+        <h3>Conversational Spanish</h3>
+        <p>Build confidence speaking! Focus on real conversations, pronunciation, and practical scenarios you'll use every day.</p>
+        <div class="course-details">
+          <div class="course-duration">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+            10 weeks
+          </div>
+          <div class="course-price">$249 <span>/course</span></div>
+        </div>
+      </div>
+      <div class="course-card reveal">
+        <div class="course-icon">🌍</div>
+        <span class="course-level">Beginner+</span>
+        <h3>Spanish & Culture</h3>
+        <p>Immerse yourself in Hispanic culture while learning. Explore traditions, music, food, and history alongside language skills.</p>
+        <div class="course-details">
+          <div class="course-duration">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+            12 weeks
+          </div>
+          <div class="course-price">$299 <span>/course</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Testimonials -->
+  <section class="testimonials" id="testimonials">
+    <div class="testimonials-header reveal">
+      <span class="section-label">Student Reviews</span>
+      <h2 class="section-title">What Our Students Say</h2>
+    </div>
+    <div class="testimonials-grid">
+      <div class="testimonial-card reveal">
+        <p class="testimonial-text">"Gabriel's patience and enthusiasm made learning Spanish feel achievable. After just 8 weeks, I could hold basic conversations with native speakers on my trip to Mexico!"</p>
+        <div class="testimonial-author">
+          <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=100&h=100&fit=crop&crop=face" alt="Sarah M." class="testimonial-avatar">
+          <div class="testimonial-info">
+            <h4>Sarah Mitchell</h4>
+            <p>Completed Foundations Course</p>
+            <div class="testimonial-rating">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="testimonial-card reveal">
+        <p class="testimonial-text">"I tried apps and other classes before, but Gabriel's method is different. He makes you feel comfortable making mistakes, which is exactly what I needed as a nervous beginner."</p>
+        <div class="testimonial-author">
+          <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&h=100&fit=crop&crop=face" alt="James K." class="testimonial-avatar">
+          <div class="testimonial-info">
+            <h4>James Kim</h4>
+            <p>Currently in Conversational Course</p>
+            <div class="testimonial-rating">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="testimonial-card reveal">
+        <p class="testimonial-text">"The cultural elements Gabriel incorporates are wonderful. I'm not just learning a language—I'm discovering a whole new world. My family in Spain is so impressed with my progress!"</p>
+        <div class="testimonial-author">
+          <img src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=100&h=100&fit=crop&crop=face" alt="Maria L." class="testimonial-avatar">
+          <div class="testimonial-info">
+            <h4>Maria Lopez</h4>
+            <p>Completed Culture Course</p>
+            <div class="testimonial-rating">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="testimonial-card reveal">
+        <p class="testimonial-text">"As someone in their 50s, I was worried about keeping up. Gabriel adapted perfectly to my pace. His classes are the highlight of my week—learning Spanish has never been this fun!"</p>
+        <div class="testimonial-author">
+          <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=100&h=100&fit=crop&crop=face" alt="Robert T." class="testimonial-avatar">
+          <div class="testimonial-info">
+            <h4>Robert Thompson</h4>
+            <p>Completed Foundations Course</p>
+            <div class="testimonial-rating">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA Section -->
+  <section class="cta" id="contact">
+    <div class="cta-content">
+      <h2>Ready to Start Your Spanish Journey?</h2>
+      <p>Join Club Español and discover why hundreds of students have chosen Gabriel as their guide to Spanish fluency. Your first consultation is free!</p>
+      <a href="mailto:hello@clubespanol.com" class="btn btn-primary">
+        Book Free Consultation
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M5 12h14M12 5l7 7-7 7"/>
+        </svg>
+      </a>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer>
+    <div class="footer-content">
+      <div class="footer-brand">
+        <span class="footer-logo">Club <span style="color: var(--terracotta)">Español</span></span>
+        <p>Making Spanish accessible, enjoyable, and unforgettable for beginners everywhere. Start your journey with Gabriel today.</p>
+        <div class="footer-social">
+          <a href="#" aria-label="Instagram">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
+              <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
+              <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
+            </svg>
+          </a>
+          <a href="#" aria-label="YouTube">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M22.54 6.42a2.78 2.78 0 0 0-1.94-2C18.88 4 12 4 12 4s-6.88 0-8.6.46a2.78 2.78 0 0 0-1.94 2A29 29 0 0 0 1 11.75a29 29 0 0 0 .46 5.33A2.78 2.78 0 0 0 3.4 19c1.72.46 8.6.46 8.6.46s6.88 0 8.6-.46a2.78 2.78 0 0 0 1.94-2 29 29 0 0 0 .46-5.25 29 29 0 0 0-.46-5.33z"></path>
+              <polygon points="9.75 15.02 15.5 11.75 9.75 8.48 9.75 15.02"></polygon>
+            </svg>
+          </a>
+          <a href="#" aria-label="Facebook">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"></path>
+            </svg>
+          </a>
+        </div>
+      </div>
+      <div class="footer-column">
+        <h4>Courses</h4>
+        <ul>
+          <li><a href="#courses">Spanish Foundations</a></li>
+          <li><a href="#courses">Conversational Spanish</a></li>
+          <li><a href="#courses">Spanish & Culture</a></li>
+          <li><a href="#courses">Private Lessons</a></li>
+        </ul>
+      </div>
+      <div class="footer-column">
+        <h4>Company</h4>
+        <ul>
+          <li><a href="#about">About Gabriel</a></li>
+          <li><a href="#testimonials">Student Reviews</a></li>
+          <li><a href="#">Blog</a></li>
+          <li><a href="#">FAQ</a></li>
+        </ul>
+      </div>
+      <div class="footer-column">
+        <h4>Contact</h4>
+        <ul>
+          <li><a href="mailto:hello@clubespanol.com">hello@clubespanol.com</a></li>
+          <li><a href="#">Schedule a Call</a></li>
+          <li><a href="#">Support</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>&copy; 2025 Club Español. All rights reserved. Made with ❤️ for Spanish learners.</p>
+    </div>
+  </footer>
+
+  <script>
+    // Navbar scroll effect
+    const navbar = document.getElementById('navbar');
+    window.addEventListener('scroll', () => {
+      if (window.scrollY > 50) {
+        navbar.classList.add('scrolled');
+      } else {
+        navbar.classList.remove('scrolled');
+      }
+    });
+
+    // Reveal animations on scroll
+    const reveals = document.querySelectorAll('.reveal');
+
+    const revealOnScroll = () => {
+      reveals.forEach(el => {
+        const windowHeight = window.innerHeight;
+        const elementTop = el.getBoundingClientRect().top;
+        const revealPoint = 150;
+
+        if (elementTop < windowHeight - revealPoint) {
+          el.classList.add('active');
+        }
+      });
+    };
+
+    window.addEventListener('scroll', revealOnScroll);
+    revealOnScroll(); // Run on load
+
+    // Smooth scroll for anchor links
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+      anchor.addEventListener('click', function(e) {
+        e.preventDefault();
+        const target = document.querySelector(this.getAttribute('href'));
+        if (target) {
+          target.scrollIntoView({
+            behavior: 'smooth',
+            block: 'start'
+          });
+        }
+      });
+    });
+  </script>
+</body>
+</html>
